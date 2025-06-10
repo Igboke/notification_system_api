@@ -11,8 +11,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
 import os
+import logging
+from dotenv import load_dotenv
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 
 load_dotenv()
 
@@ -31,6 +37,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# User model
+AUTH_USER_MODEL = "users.CustomUser"
+
 
 # Application definition
 
@@ -41,6 +50,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # new apps
+    "users.apps.UsersConfig",
+    "rest_framework",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
