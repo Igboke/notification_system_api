@@ -30,12 +30,15 @@ class CustomUserManager(BaseUserManager):
 
         # Get the User model dynamically. Required in managers.
         user_model = get_user_model()
+        username = email
 
         # Create the user instance.
         # Note: AbstractUser still has a 'username' field.
         # Since REQUIRED_FIELDS is empty, createsuperuser won't prompt for it,
         # The AbstractUser base class handles defaults for fields like is_active, etc.
-        user = user_model(email=email, **extra_fields)  # Set email directly
+        user = user_model(
+            username=username, email=email, **extra_fields
+        )  # Set email directly
 
         user.set_password(password)
         user.save(using=self._db)
