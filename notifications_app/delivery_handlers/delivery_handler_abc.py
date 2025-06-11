@@ -1,3 +1,7 @@
+"""
+Abstract method
+"""
+
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
@@ -8,8 +12,9 @@ class AbstractDeliveryHandler(ABC):
     Defines a generic interface for sending a notification.
     """
 
+    @classmethod
     @abstractmethod
-    def send(self, recipient_id: int, message_data: Dict[str, Any]):
+    def send(cls, recipient_id: int, message_data: Dict[str, Any]):
         """
         Sends the notification content to the specified recipient via this handler's channel.
 
