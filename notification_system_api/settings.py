@@ -44,12 +44,14 @@ AUTH_USER_MODEL = "users.CustomUser"
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",
     # new apps
     "users.apps.UsersConfig",
     "apis.apps.ApisConfig",
@@ -87,6 +89,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "notification_system_api.wsgi.application"
+
+ASGI_APPLICATION = "notification_system_api.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 
 # Database
@@ -143,7 +153,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Email configurations
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# Base URL
 BASE_URL = "http://localhost:8000"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
