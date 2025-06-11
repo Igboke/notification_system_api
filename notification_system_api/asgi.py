@@ -33,7 +33,7 @@ application = ProtocolTypeRouter(
         "http": django_asgi_app,
         # "websocket" protocol will be handled by Channels.
         # AuthMiddlewareStack integrates Django's authentication system with WebSockets,
-        # so you can access `self.scope['user']` in your consumers.
+        # so you can access `self.scope['user']` in consumers.
         "websocket": AuthMiddlewareStack(
             # URLRouter maps WebSocket paths to specific consumers.
             URLRouter(
