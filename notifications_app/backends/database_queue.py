@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any
 
-from notifications_abc import AbstractNotificationBackend
+from notifications_app.backends.notifications_abc import AbstractNotificationBackend
 from notifications_app.models import NotificationJob, UserCommunicationPreference
 
 logger = logging.getLogger(__name__)
