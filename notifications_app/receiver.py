@@ -28,7 +28,7 @@ def handle_user_registration_notification(sender, user, **kwargs):
 
     verification_token = generate_verification_url(user)
     verification_url = (
-        f"{settings.BASE_URL}{reverse_lazy('verify_email')}?token={verification_token}"
+        f"{settings.BASE_URL}{reverse_lazy('verify-email')}?token={verification_token}"
     )
 
     # Define the content for the welcome email
