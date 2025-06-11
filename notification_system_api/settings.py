@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "notifications_app.apps.NotificationsAppConfig",
     "articles.apps.ArticlesConfig",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_spectacular",
 ]
 
