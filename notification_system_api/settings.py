@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "apis.apps.ApisConfig",
     "notifications_app.apps.NotificationsAppConfig",
+    "articles.apps.ArticlesConfig",
     "rest_framework",
     "drf_spectacular",
 ]
