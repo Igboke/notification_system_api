@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # new apps
     "users.apps.UsersConfig",
     "apis.apps.ApisConfig",
+    "notifications_app.apps.NotificationsAppConfig",
     "rest_framework",
     "drf_spectacular",
 ]
