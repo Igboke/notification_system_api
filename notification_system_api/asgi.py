@@ -9,6 +9,13 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 
 import os
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "notification_system_api.settings")
+
+import django
+
+# This loads all your Django apps and sets up the app registry.
+django.setup()
+
 from django.core.asgi import get_asgi_application
 
 from channels.auth import (
@@ -21,7 +28,6 @@ from channels.routing import (
 
 import notifications_app.routing
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "notification_system_api.settings")
 
 django_asgi_app = (
     get_asgi_application()
