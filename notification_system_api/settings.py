@@ -145,12 +145,20 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     # OTHER DRF SETTINGS GO HERE
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",  # For browser-based API
+        "rest_framework.authentication.BasicAuthentication",  # For simple clients
+        "rest_framework.authentication.TokenAuthentication",  # For token-based clients
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Notification API",
-    "DESCRIPTION": "API for Notification System",
+    "TITLE": "Notification System API",
+    "DESCRIPTION": "API for handling email and real-time in-app notifications.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
