@@ -130,7 +130,7 @@ This will run the HTTP API (e.g., user registration, article creation)
 
 2.**Start the Django Channels Server (Daphne, Optional for production))**:
 
-When you use python manage.py runserver, the manage.py script automatically handles setting the DJANGO_SETTINGS_MODULE environment variable for you, pointing to your project's settings.py file.
+When you use `python manage.py runserver`, the `manage.py` script automatically handles setting the `DJANGO_SETTINGS_MODULE` environment variable for you, pointing to your project's `settings.py` file.
 
 In a *new terminal*, activate your virtual environment and run:
 
