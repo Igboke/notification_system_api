@@ -66,14 +66,14 @@ Follow these steps to set up the project locally for development.
 
 ### Installation
 
-1. Clone the repository:
+1.**Clone the repository**:
 
 ```bash
 git clone https://github.com/igboke/notification_system_api.git
 cd notification_system_api
 ```
 
-2.Create and activate a virtual environment:
+2.**Create and activate a virtual environment**:
 
 ```bash
 python -m venv venv
@@ -83,13 +83,13 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-3.Install dependencies:
+3.**Install dependencies**:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4.Set up Environment Variables:
+4.**Set up Environment Variables**:
 
 Create a `.env` file in the root of your project directory (`notification_system_api/`) and add the following:
 
@@ -103,14 +103,14 @@ EMAIL_HOST_USER='your_smtp_username'
 EMAIL_HOST_PASSWORD='your_smtp_password'
 ```
 
-5.Run Database Migrations:
+5.**Run Database Migrations**:
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-6.Create a Superuser (for Admin panel access):
+6.**Create a Superuser (for Admin panel access)**:
 
 ```bash
 python manage.py createsuperuser
@@ -120,7 +120,7 @@ python manage.py createsuperuser
 
 This project involves running multiple components: the Django web server, the Django Channels server (Daphne), and a custom notification worker.
 
-1.Start the Django Development Server:
+1.**Start the Django Development Server**:
 
 ```bash
 python manage.py runserver
@@ -128,8 +128,10 @@ python manage.py runserver
 
 This will run the HTTP API (e.g., user registration, article creation)
 
-2.Start the Django Channels Server (Daphne, Optional(for production)):
+2.**Start the Django Channels Server (Daphne, Optional for production))**:
+
 When you use python manage.py runserver, the manage.py script automatically handles setting the DJANGO_SETTINGS_MODULE environment variable for you, pointing to your project's settings.py file.
+
 In a *new terminal*, activate your virtual environment and run:
 
 ```bash
@@ -138,7 +140,8 @@ daphne -b 0.0.0.0 -p 8001 notification_system_api.asgi:application
 
 This will serve the WebSocket connections for real-time in-app notifications. Adjust the port (-p) if needed.
 
-3.Start the Notification Worker:
+3.**Start the Notification Worker**:
+
 In another new terminal, activate your virtual environment and run the custom management command:
 
 ```bash
@@ -146,3 +149,55 @@ python manage.py run_notification_worker
 ```
 
 This worker polls the `NotificationJob` table and dispatches notifications via the appropriate handlers (email, in-app)
+
+## 🌐 API Endpoints
+
+The API documentation is available via Swagger UI.
+
+- API Documentation (Swagger UI):
+
+```bash
+http://localhost:8000/api/docs/ 
+```
+
+- API Schema (OpenAPI JSON):
+
+```bash
+http://localhost:8000/api/schema/
+```
+
+### Key Endpoints
+
+- User Registration: `/api/v1/register/` (POST)
+- Email Verification: `/api/v1/verify-email/` (GET with `token` query param)
+- Article Creation: `/api/v1/article/` (POST, authentication required)
+
+## 🧪 Running Tests
+
+To run the test suite for the project:
+
+```bash
+python manage.py test
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to contribute, please follow these steps:
+
+- Fork the repository.
+- Create a new branch for your feature or bug fix.
+- Make your changes and write tests if applicable.
+- Ensure all tests pass.
+- Submit a pull request.
+
+## 🗺️ Roadmap
+
+- Integration with a robust message broker (e.g., Redis, RabbitMQ) for the Channels layer and background worker.
+- More advanced notification types and customization options.
+- Frontend client examples for consuming the API and WebSockets.
+- Comprehensive logging and monitoring.
+- Deployment instructions.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
