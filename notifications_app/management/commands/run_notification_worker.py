@@ -16,7 +16,22 @@ class Command(BaseCommand):
         "Runs the notification worker to process pending jobs from the database queue."
     )
 
+    def add_arguments(self, parser):
+        # Add an optional argument to run the command just once for testing
+        parser.add_argument(
+            "--run-once",
+            action="store_true",
+            help="Run one batch of jobs and exit.",
+        )
+
     def handle(self, *args, **options):
+        # If the --run-once flag is used, just process jobs and exit.
+        if options["run_once"]:
+            self.stdout.write(self.style.SUCCESS("Running one-time job processing..."))
+            self.process_pending_jobs()
+            self.stdout.write(self.style.SUCCESS("One-time job processing complete."))
+            return
+
         self.stdout.write(
             self.style.SUCCESS("Starting notification worker... Press Ctrl+C to stop.")
         )
@@ -58,7 +73,9 @@ class Command(BaseCommand):
             # even if other jobs in the batch fail.
             with transaction.atomic():
                 try:
-                    current_job = NotificationJob.objects.get(id=job.id)
+                    current_job = NotificationJob.objects.select_for_update().get(
+                        id=job.id
+                    )
                     if current_job.status != NotificationJob.STATUS_PENDING:
                         logger.warning(
                             f"Job {current_job.id} was already processed or is no longer pending. Skipping."
