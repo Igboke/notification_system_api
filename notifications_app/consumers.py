@@ -24,6 +24,16 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             "user"
         ]  # User object from AuthMiddlewareStack in asgi.py
 
+        logger.info(
+            f"WebSocket connect attempt: User authenticated = {self.user.is_authenticated}"
+        )
+        if self.user.is_authenticated:
+            logger.info(
+                f"Authenticated user ID: {self.user.id}, Username: {self.user.username}"
+            )
+        else:
+            logger.info("User is not authenticated (AnonymousUser).")
+
         if self.user.is_authenticated:
             # Create a unique group name for this user based on their ID.
             # This is how the worker will target messages to this specific user.
