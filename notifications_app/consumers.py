@@ -89,6 +89,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         notification_data = event[
             "message"
         ]  # The actual notification content from the worker
+        job_id = notification_data.get("job_id")
 
         logger.info(
             f"Sending in-app notification to client {self.user.id}: {notification_data}"
@@ -102,6 +103,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+        if job_id:
+            await self._mark_notification_as_read(job_id)
 
     async def send_missed_notifications(self):
         """
