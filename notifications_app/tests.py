@@ -86,7 +86,7 @@ class NotificationWorkerTests(TestCase):
 
         job.refresh_from_db()
         self.assertEqual(job.status, NotificationJob.STATUS_SENT)
-        mock_email_send.assert_called_once_with(self.user.id, {"subject": "Hi"})
+        mock_email_send.assert_called_once_with(self.user.id, {"subject": "Hi"}, job.id)
         mock_in_app_send.assert_not_called()
 
     def test_worker_processes_pending_in_app_job(
@@ -107,7 +107,9 @@ class NotificationWorkerTests(TestCase):
 
         job.refresh_from_db()
         self.assertEqual(job.status, NotificationJob.STATUS_SENT)
-        mock_in_app_send.assert_called_once_with(self.user.id, {"title": "Hello"})
+        mock_in_app_send.assert_called_once_with(
+            self.user.id, {"title": "Hello"}, job.id
+        )
         mock_email_send.assert_not_called()
 
     def test_worker_handles_delivery_failure_and_retries(
