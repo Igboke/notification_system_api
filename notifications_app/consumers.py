@@ -140,7 +140,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 # Mark as read after sending. This prevents re-sending on subsequent reconnects.
                 await self._mark_notification_as_read(job.id)
         else:
-            logger.info(f"No missed notifications for user {self.user_id}.")
+            logger.info(f"No missed notifications for user {self.user.id}.")
 
     # Helper method to mark notification as read in the database
     @sync_to_async
