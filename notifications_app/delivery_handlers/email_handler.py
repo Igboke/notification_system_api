@@ -23,7 +23,7 @@ class EmailDeliveryHandler(AbstractDeliveryHandler):
     """
 
     @classmethod
-    def send(cls, recipient_id: int, message_data: dict):
+    def send(cls, recipient_id: int, message_data: dict, job_id: int = None):
         """
         Sends an email notification to the specified user.
         """
