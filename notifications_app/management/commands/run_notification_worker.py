@@ -120,7 +120,7 @@ class Command(BaseCommand):
                             continue
 
                         message_payload = job.message_data
-                        handler_class.send(job.recipient_id, message_payload)
+                        handler_class.send(job.recipient_id, message_payload, job.id)
 
                         job.status = NotificationJob.STATUS_SENT
                         job.sent_at = timezone.now()
