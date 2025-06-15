@@ -87,6 +87,10 @@ class NotificationJob(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True, help_text="Timestamp of the last update to the record."
     )
+    is_read = models.BooleanField(
+        default=False,
+        help_text="For in-app notifications, indicates if the client has acknowledged receipt via WebSocket.",
+    )
 
     class Meta:
         """
