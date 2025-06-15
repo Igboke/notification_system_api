@@ -14,12 +14,13 @@ class AbstractDeliveryHandler(ABC):
 
     @classmethod
     @abstractmethod
-    def send(cls, recipient_id: int, message_data: Dict[str, Any]):
+    def send(cls, recipient_id: int, message_data: Dict[str, Any], job_id: int):
         """
         Sends the notification content to the specified recipient via this handler's channel.
 
         Args:
             recipient_id (int): The ID of the user who is the recipient.
             message_data (Dict[str, Any]): A dictionary containing the notification content.
+            job_id (int): The ID of the notification job for tracking purposes.
         """
         pass
