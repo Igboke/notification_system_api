@@ -6,6 +6,9 @@ from channels.generic.websocket import (
 
 from django.contrib.auth import get_user_model
 
+from notifications_app.models import NotificationJob
+from asgiref.sync import sync_to_async
+
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
@@ -46,6 +49,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             # `self.channel_name` is a unique ID for this specific WebSocket connection.
             await self.channel_layer.group_add(self.user_group_name, self.channel_name)
             await self.accept()  # Accept the WebSocket connection
+            await self.send_missed_notifications()
         else:
             logger.warning(
                 "Anonymous user attempted to connect to WebSocket. Connection rejected."
@@ -98,3 +102,55 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+
+    async def send_missed_notifications(self):
+        """
+        Fetch notifications that were sent by the worker but not yet marked as read for this user
+        """
+        # Database queries must be run in a separate thread, hence sync_to_async
+        missed_notifications = await sync_to_async(list)(
+            NotificationJob.objects.filter(
+                recipient_id=self.user.id,
+                channel="in_app",
+                status="sent",  # Only notifications successfully sent by worker
+                is_read=False,
+            ).order_by(
+                "created_at"
+            )  # Send oldest first
+        )
+
+        if missed_notifications:
+            logger.info(
+                f"Found {len(missed_notifications)} missed notifications for user {self.user.id}. Sending now."
+            )
+            for job in missed_notifications:
+                # Send each missed notification
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "type": "notification_missed",  # Differentiate type for frontend
+                            "data": job.message_data,
+                            "job_id": job.id,
+                        }
+                    )
+                )
+                # Mark as read after sending. This prevents re-sending on subsequent reconnects.
+                await self._mark_notification_as_read(job.id)
+        else:
+            logger.info(f"No missed notifications for user {self.user_id}.")
+
+    # Helper method to mark notification as read in the database
+    @sync_to_async
+    def _mark_notification_as_read(self, job_id):
+        try:
+            job = NotificationJob.objects.get(id=job_id)
+            if not job.is_read:  # Only update if not already marked
+                job.is_read = True
+                job.save()
+                logger.debug(f"Notification Job {job_id} marked as read.")
+        except NotificationJob.DoesNotExist:
+            logger.error(
+                f"Notification Job {job_id} not found when trying to mark as read."
+            )
+        except Exception as e:
+            logger.error(f"Error marking Notification Job {job_id} as read: {e}")
