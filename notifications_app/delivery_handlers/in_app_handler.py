@@ -2,6 +2,7 @@
 In app handler
 """
 
+from django.utils import timezone
 import logging
 from channels.layers import get_channel_layer  # To interact with the Channels layer
 from asgiref.sync import (
@@ -21,7 +22,7 @@ class InAppDeliveryHandler(AbstractDeliveryHandler):
     """
 
     @classmethod
-    def send(cls, recipient_id: int, message_data: dict):
+    def send(cls, recipient_id: int, message_data: dict, job_id: int):
         """
         Sends an in-app notification to the appropriate WebSocket group for the recipient.
         """
@@ -47,6 +48,8 @@ class InAppDeliveryHandler(AbstractDeliveryHandler):
                     "type": "send_notification",
                     # 'message' is the actual payload that will be passed to the consumer.
                     "message": message_data,
+                    "job_id": job_id,  # Include job ID for tracking
+                    "timestamp": timezone.now().isoformat(),
                 },
             )
             logger.info(
